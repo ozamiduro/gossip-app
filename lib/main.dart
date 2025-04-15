@@ -1,9 +1,20 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gossip_app/app/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('es')],
+      path: './shared/assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -20,6 +31,9 @@ class MyApp extends StatelessWidget {
             themeMode: themeValue.getThemeMode,
             theme: themeValue.getLightTheme,
             darkTheme: themeValue.getDarkTheme,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
             home: const MyHomePage(title: 'GOSSIP'),
           );
         },
